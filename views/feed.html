@@ -1,0 +1,77 @@
+{% extends "index.html" %}
+{% block title %}Facebook - Profile{% endblock %}
+{% block content %}
+
+<div class="wrapper">
+    <div class="nav">
+        <div class="nav__header pull-right">
+            <span class="profile" id = {{name}}><img src={{data[0]}}></span>
+            <a href="logout.php"><button class=" btn-danger">Logout</button></a>
+        </div>
+        <div class="newpost">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="newpost__text">
+                    <textarea  name="post_text" id="newpost__text--holder" class="form-control" rows="2" id="newComment"></textarea>
+                </div>
+                <div class="newpost__file">
+                    <input type="file" class="newpost__file--name" name="image">
+                    <button  id="newpost--btn"class=" btn-danger  pull-right">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% for item in data[1] %}
+        <div class="post" id = {{item.id}} >
+            <div class="post-header">
+                <div class="post-header__dp">
+                    <img class="post-header__dp--holder"   src={{item.pic}}>
+                </div>
+                <div class="post-header__username">
+                    <a class="post-header__username--text" href="">{{item.name}}</a>
+                </div>
+            </div>
+
+            <div class="post-body">
+                <div class="post-body__img">
+                    {% set temp = item.post_pic | replace({' ': '%20' })%}
+                    <img src = {{ temp }} >
+                </div>
+
+                <div class="post-body__caption">
+                    <span class="post-body__caption--text">
+                        {{item.post}}
+                    </span>
+                </div>
+            </div>
+            <div class="comment_post">
+                <div class="post-comment__dp">
+                    <img src={{data[0]}} class="comment_image--holder">
+                </div>
+
+                <div class="post-comment__input">
+                    <input type="hidden" class="user_id" value="{{ user_id }}">
+                    <input name="comment" type="text" class="comment" placeholder=" Write a comment ...">
+                </div>
+            </div>
+            <div class="post-comments">
+                {% for comment in item.comments %}
+                    <div class="post_comment--body">
+                        <div class="post_comment--username">
+                            <span class="post_comment--username__text">
+                                {{comment.c_name}}
+                            </span>
+                        </div>
+
+                        <div class="post_comment__body">
+                            <span class="post-comment__body--text">
+                                {{comment.comment}}
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="footer"></div>
+</div>
+{% endblock %}
